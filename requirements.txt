@@ -1,9 +1,10 @@
-pip>=1.1
-http://tonyseek.googlecode.com/files/Babel-1.0dev-r0.tar.gz
-http://hg.sqlalchemy.org/sqlalchemy/archive/default.tar.gz
+http://tonyseek.googlecode.com/files/Babel-1.0dev-r0.tar.gz#egginfo=babel
+http://hg.sqlalchemy.org/sqlalchemy/archive/default.tar.gz#egginfo=sqlalchemy
 Flask>=0.9
 Flask-Assets>=0.7
 Flask-Babel>=0.8
 Flask-OAuth>=0.11
 Flask-OpenID>=1.0.1
 Flask-SQLAlchemy>=0.1.6
+pep8
+pyflakes
