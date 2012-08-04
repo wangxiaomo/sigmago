@@ -36,3 +36,10 @@ destory_env: $(ENV_DIR)
 env: $(ENV_DIR)
 	@echo "=> Please enter next command to enter virtual enviroment." >&2
 	@echo $(ACTIVATE)
+
+check:
+	@echo "=> Checking the coding style."
+	pep8 ./sigmago
+	pep8 ./tests
+	pyflakes ./sigmago
+	pyflakes ./tests
