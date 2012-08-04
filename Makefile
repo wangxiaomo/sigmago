@@ -4,7 +4,7 @@ REQUIREMENT = ./requirements.txt
 
 create_env:
 	@echo "=> Creating a virtual environment." >&2
-	mkdir $(ENV_DIR)
+	mkdir -p $(ENV_DIR)
 	virtualenv $(ENV_DIR)
 
 create_cfg:
