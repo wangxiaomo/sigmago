@@ -3,6 +3,7 @@
 
 from flask.ext.assets import Environment
 from flask.ext.babel import Babel
+from flask.ext.login import LoginManager
 from flask.ext.oauth import OAuth
 from flask.ext.openid import OpenID
 from flask.ext.sqlalchemy import SQLAlchemy
@@ -14,6 +15,7 @@ OAUTH_REMOTE_NAMES = ("google", "douban")
 
 assets = Environment()
 babel = Babel()
+login_manager = LoginManager()
 oauth = OAuth()
 openid = OpenID()
 db = SQLAlchemy()
@@ -23,5 +25,6 @@ def setup_extensions_with_app(app):
     """Setups all extension to the given app."""
     assets.init_app(app)
     babel.init_app(app)
+    login_manager.init_app(app)
     setup_oauth_remotes(oauth, app.config, app.import_name)
     openid.init_app(app)

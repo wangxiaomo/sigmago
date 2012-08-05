@@ -1,11 +1,14 @@
 http://tonyseek.googlecode.com/files/Babel-1.0dev-r0.tar.gz#egg=babel
 http://hg.sqlalchemy.org/sqlalchemy/archive/default.tar.gz#egg=sqlalchemy
+https://bitbucket.org/simplecodes/wtforms/get/tip.tar.gz#egg=wtforms
 Flask>=0.9
 Flask-Assets>=0.7
 Flask-Babel>=0.8
+Flask-Login>=0.1.3
 http://github.com/mitsuhiko/flask-oauth/zipball/master#egg=Flask-OAuth-dev
 Flask-OpenID>=1.0.1
 Flask-Script
 Flask-SQLAlchemy>=0.1.6
+Flask-WTF>=0.8
 pep8
 pyflakes
