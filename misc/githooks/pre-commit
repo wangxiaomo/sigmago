@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+pyfiles=`git status | grep -e '\.py$' | awk '{ print $NF }'`
+if [ -n "$pyfiles" ]; then
+    echo $pyfiles | xargs pep8 >&2 && echo $pyfiles | xargs pyflakes >&2
+fi

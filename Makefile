@@ -4,6 +4,7 @@ ACTIVATE = . $(ENV_ACTIVATE);
 REQUIREMENT = ./requirements.txt
 PIP_CACHE_DIR = $(ENV_DIR)/.pip_download_cache
 CONFIG_FILENAME = config.cfg
+GIT_PRE_COMMIT = "./.git/hooks/pre-commit"
 
 create_env:
 	@echo "=> Creating a virtual environment." >&2
@@ -24,6 +25,11 @@ init_env: create_env create_cfg
 	mkdir -p $(ENV_DIR)/$(PIP_CACHE_DIRNAME)
 	echo 'export SIGMAGO_CONFIG="$$VIRTUAL_ENV/$(CONFIG_FILENAME)"' \
 		>> $(ENV_ACTIVATE)
+
+install_githook:
+	@echo "=> Installing git hooks to check source before commit."
+	cp ./misc/githooks/pre-commit $(GIT_PRE_COMMIT)
+	chmod +x $(GIT_PRE_COMMIT)
 
 init: init_env install_libs
 
