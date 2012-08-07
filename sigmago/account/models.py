@@ -13,7 +13,7 @@ class UserAccount(UserMixin, db.Model):
     """The account model of register user."""
 
     #: the strategy to generate hash salt
-    hash_salt_generator = lambda: uuid.uuid4().hex
+    hash_salt_generator = staticmethod(lambda: uuid.uuid4().hex)
     #: the strategy to hash password
     hash_algorithm = "sha256"
 
