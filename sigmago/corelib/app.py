@@ -13,10 +13,10 @@ CONFIG_BUILTIN = "sigmago.config.app"
 CONFIG_ENV_NAME = "SIGMAGO_CONFIG"
 
 
-def make_app(config=None):
+def make_app(name=None, config=None):
     """Creates an application instance."""
     #: creates app instance
-    app = Flask(__name__)
+    app = Flask(name or __name__)
     #: loads built-in configuration
     app.config.from_object(CONFIG_BUILTIN)
     #: loads outside configuration
@@ -25,7 +25,7 @@ def make_app(config=None):
     elif os.path.exists(config):
         app.config.from_pyfile(config)
     else:
-        app.config.from_object(CONFIG_ENV_NAME)
+        app.config.from_object(config)
     #: setups extensions
     setup_extensions_with_app(app)
     #: mount blueprints

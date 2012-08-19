@@ -1,6 +1,6 @@
 ENV_DIR = ./var
 ENV_ACTIVATE = $(ENV_DIR)/bin/activate
-ACTIVATE = . $(ENV_ACTIVATE);
+ACTIVATE = source $(ENV_ACTIVATE);
 REQUIREMENT = ./requirements.txt
 PIP_CACHE_DIR = $(ENV_DIR)/.pip_download_cache
 CONFIG_FILENAME = config.cfg
@@ -10,6 +10,7 @@ create_env:
 	@echo "=> Creating a virtual environment." >&2
 	mkdir -p $(ENV_DIR)
 	virtualenv --no-site-package $(ENV_DIR)
+	echo "sigmago-dev" > $(ENV_DIR)/__name__
 
 create_cfg:
 	@echo "=> Creating configuration file in current environment." >&2
@@ -19,6 +20,8 @@ install_libs: $(REQUIREMENT)
 	@echo "=> Installing required libraries." >&2
 	$(ACTIVATE) pip install --download-cache $(PIP_CACHE_DIR) \
 		-r $(REQUIREMENT)
+	@echo "=> Creating links of this project in site-packages directory." >&2
+	python setup.py develop
 
 init_env: create_env create_cfg
 	@echo "=> Initializing current virtual environment." >&2
@@ -31,7 +34,7 @@ install_githook:
 	cp ./misc/githooks/pre-commit $(GIT_PRE_COMMIT)
 	chmod +x $(GIT_PRE_COMMIT)
 
-init: init_env install_libs
+init: init_env install_libs install_githook
 
 destory_env: $(ENV_DIR)
 	@echo "=> Removing the virtual enviroment." >&2
@@ -45,7 +48,10 @@ env: $(ENV_DIR)
 
 check:
 	@echo "=> Checking the coding style."
-	pep8 ./sigmago
-	pep8 ./tests
-	pyflakes ./sigmago
-	pyflakes ./tests
+	$(ACTIVATE) pep8 ./sigmago
+	$(ACTIVATE) pep8 ./tests
+	$(ACTIVATE) pyflakes ./sigmago
+	$(ACTIVATE) pyflakes ./tests
+
+test:
+	$(ACTIVATE) python setup.py test
