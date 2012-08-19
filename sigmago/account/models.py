@@ -30,7 +30,7 @@ class UserAccount(UserMixin, db.Model):
         #: update password
         self.change_passwd(passwd)
         #: assign other attributes
-        super(db.Model, self).__init__(**fields)
+        super(UserAccount, self).__init__(**fields)
 
     def change_passwd(self, new_passwd):
         """Changes a new password.
@@ -40,7 +40,7 @@ class UserAccount(UserMixin, db.Model):
         #: generate a new salt
         self.passwd_salt = self.hash_salt_generator()
         #: change the password hash value
-        self.passwd_hash = self.make_passwd_hash(self.passwd_salt, new_passwd)
+        self.passwd_hash = self.make_passwd_hash(new_passwd)
 
     def check_passwd(self, input_passwd):
         """Checks is a input password correct.
@@ -53,11 +53,11 @@ class UserAccount(UserMixin, db.Model):
         #: not empty and be same
         return self.passwd_hash and self.passwd_hash == input_passwd_hash
 
-    @classmethod
-    def make_passwd_hash(cls, passwd_salt, raw_passwd):
+    def make_passwd_hash(self, raw_passwd):
         """Creates a hash value from a raw password string."""
-        hashobj = hashlib.new(cls.hash_algorithm)
-        hashobj.update("%s:%s" % (passwd_salt, raw_passwd))
+        #: TODO use werkzeug's hash algorithm instead this
+        hashobj = hashlib.new(self.hash_algorithm)
+        hashobj.update('%s:%s' % (self.passwd_salt, raw_passwd))
         return hashobj.hexdigest()
 
 
