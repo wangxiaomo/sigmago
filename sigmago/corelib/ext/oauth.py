@@ -14,7 +14,10 @@ def setup_oauth_remotes(oauth_ext, config, namespace):
     """
     for remote_name in OAUTH_REMOTE_NAMES:
         #: build a new name with namespace
-        remote_name_ns = "%s:%s" % (namespace, remote_name)
+        if namespace:
+            remote_name_ns = "%s:%s" % (namespace, remote_name)
+        else:
+            remote_name_ns = remote_name
         #: get app_id and app_secret id from app config files
         prefix = "OAUTH_%s_" % remote_name.upper()
         app_id = config[prefix + "APP_ID"]

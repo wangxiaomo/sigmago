@@ -26,5 +26,6 @@ def setup_extensions_with_app(app):
     assets.init_app(app)
     babel.init_app(app)
     login_manager.init_app(app)
-    setup_oauth_remotes(oauth, app.config, app.import_name)
+    setup_oauth_remotes(oauth, app.config,
+                        namespace=getattr(app, "app_name", None))
     openid.init_app(app)
