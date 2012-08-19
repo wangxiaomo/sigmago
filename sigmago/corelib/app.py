@@ -13,10 +13,11 @@ CONFIG_BUILTIN = "sigmago.config.app"
 CONFIG_ENV_NAME = "SIGMAGO_CONFIG"
 
 
-def make_app(name=None, config=None):
+def make_app(import_name=None, config=None, app_name="sigmago"):
     """Creates an application instance."""
     #: creates app instance
-    app = Flask(name or __name__)
+    app = Flask(import_name or __name__)
+    app.app_name = app_name
     #: loads built-in configuration
     app.config.from_object(CONFIG_BUILTIN)
     #: loads outside configuration
