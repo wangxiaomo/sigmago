@@ -1,6 +1,6 @@
 ENV_DIR = ./var
 ENV_ACTIVATE = $(ENV_DIR)/bin/activate
-ACTIVATE = . $(ENV_ACTIVATE);
+ACTIVATE = source $(ENV_ACTIVATE);
 REQUIREMENT = ./requirements.txt
 PIP_CACHE_DIR = $(ENV_DIR)/.pip_download_cache
 CONFIG_FILENAME = config.cfg
@@ -48,7 +48,10 @@ env: $(ENV_DIR)
 
 check:
 	@echo "=> Checking the coding style."
-	pep8 ./sigmago
-	pep8 ./tests
-	pyflakes ./sigmago
-	pyflakes ./tests
+	$(ACTIVATE) pep8 ./sigmago
+	$(ACTIVATE) pep8 ./tests
+	$(ACTIVATE) pyflakes ./sigmago
+	$(ACTIVATE) pyflakes ./tests
+
+test:
+	$(ACTIVATE) python setup.py test
