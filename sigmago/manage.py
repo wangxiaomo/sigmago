@@ -7,7 +7,7 @@ from sigmago.corelib.app import make_app
 from sigmago.corelib.ext import db
 
 
-app = make_app()
+app = make_app("sigmago.manage")
 manager = Manager(app)
 
 
