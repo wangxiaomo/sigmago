@@ -8,7 +8,7 @@ from flask.ext.oauth import OAuth
 from flask.ext.openid import OpenID
 from flask.ext.sqlalchemy import SQLAlchemy
 
-from sigmago.corelib.ext.oauth import setup_oauth_remotes
+from sigmago.corelib.ext.oauth import setup_oauth_remotes, get_remote_app
 
 
 OAUTH_REMOTE_NAMES = ("google", "douban")
@@ -26,5 +26,7 @@ def setup_extensions_with_app(app):
     assets.init_app(app)
     babel.init_app(app)
     login_manager.init_app(app)
-    setup_oauth_remotes(oauth, app.config, app.import_name)
+    setup_oauth_remotes(oauth, app.config,
+                        namespace=getattr(app, "app_name", None))
+    oauth.get_remote_client = get_remote_app
     openid.init_app(app)

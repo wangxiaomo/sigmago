@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
+from flask import current_app
+
+
 OAUTH_REMOTE_NAMES = ["google", "douban"]
 
 
@@ -14,7 +17,10 @@ def setup_oauth_remotes(oauth_ext, config, namespace):
     """
     for remote_name in OAUTH_REMOTE_NAMES:
         #: build a new name with namespace
-        remote_name_ns = "%s:%s" % (namespace, remote_name)
+        if namespace:
+            remote_name_ns = "%s:%s" % (namespace, remote_name)
+        else:
+            remote_name_ns = remote_name
         #: get app_id and app_secret id from app config files
         prefix = "OAUTH_%s_" % remote_name.upper()
         app_id = config[prefix + "APP_ID"]
@@ -22,6 +28,13 @@ def setup_oauth_remotes(oauth_ext, config, namespace):
         #: setup the remote application
         make_remote = globals()['make_%s_remote' % remote_name]
         make_remote(oauth_ext, app_id, app_secret, remote_name_ns)
+
+
+def get_remote_app(oauth_ext, name):
+    """Gets a oauth remote application client in current request context."""
+    namespace = getattr(current_app, "app_name", None)  # app_name is namespace
+    name_ns = name if not namespace else "%s:%s" % (namespace, name)
+    return oauth_ext.remote_apps[name_ns]
 
 
 def make_google_remote(oauth_ext, app_id, app_secret, name="google"):
