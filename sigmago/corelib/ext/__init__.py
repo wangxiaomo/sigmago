@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
+import functools
+
 from flask.ext.assets import Environment
 from flask.ext.babel import Babel
 from flask.ext.login import LoginManager
@@ -20,6 +22,9 @@ oauth = OAuth()
 openid = OpenID()
 db = SQLAlchemy()
 
+#: wraps the "get_remote_app" function to an instance method
+oauth.get_remote_app = functools.partial(get_remote_app, oauth)
+
 
 def setup_extensions_with_app(app):
     """Setups all extension to the given app."""
@@ -28,5 +33,4 @@ def setup_extensions_with_app(app):
     login_manager.init_app(app)
     setup_oauth_remotes(oauth, app.config,
                         namespace=getattr(app, "app_name", None))
-    oauth.get_remote_client = get_remote_app
     openid.init_app(app)

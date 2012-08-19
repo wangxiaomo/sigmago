@@ -1,6 +1,6 @@
 ENV_DIR = ./var
 ENV_ACTIVATE = $(ENV_DIR)/bin/activate
-ACTIVATE = source $(ENV_ACTIVATE);
+ACTIVATE = . $(ENV_ACTIVATE);
 REQUIREMENT = ./requirements.txt
 PIP_CACHE_DIR = $(ENV_DIR)/.pip_download_cache
 CONFIG_FILENAME = config.cfg

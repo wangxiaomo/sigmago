@@ -17,8 +17,8 @@ class SigmagoTestCase(TestCase):
     def create_app(self):
         #: build app name
         import_name = inspect.getmodule(self).__name__
-        app_name = "sigmago-test-%d" % id(self.__class__.app_count)
-        self.__class__.app_count += 1
+        app_name = "sigmago-test[%d]" % SigmagoTestCase.app_count
+        SigmagoTestCase.app_count += 1
         #: create app instance
         app = make_app(import_name=import_name, app_name=app_name)
         app.config["TESTING"] = True
