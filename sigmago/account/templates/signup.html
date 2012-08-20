@@ -1,0 +1,32 @@
+<form method="post" action="{{ request.path }}">
+    <div>
+        {{ form.name.label() }}
+        {{ form.name() }}
+        <span>{{ form.name.errors | join(", ") }}</span>
+    </div>
+    <div>
+        {{ form.email.label() }}
+        {{ form.email() }}
+        <span>{{ form.email.errors | join(", ") }}</span>
+    </div>
+    <div>
+        {{ form.nickname.label() }}
+        {{ form.nickname() }}
+        <span>{{ form.nickname.errors | join(", ") }}</span>
+    </div>
+    <div>
+        {{ form.passwd.label() }}
+        {{ form.passwd() }}
+        <span>{{ form.passwd.errors | join(", ") }}</span>
+    </div>
+    <div>
+        {{ form.confirm_passwd.label() }}
+        {{ form.confirm_passwd() }}
+        <span>{{ form.confirm_passwd.errors | join(", ") }}</span>
+    </div>
+    <div>
+        {{ form.csrf_token() }}
+        {{ form.submit() }}
+        <span>{{ form.csrf_token.errors | join(", ") }}</span>
+    </div>
+</form>

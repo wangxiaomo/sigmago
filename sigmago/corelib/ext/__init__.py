@@ -38,3 +38,4 @@ def setup_extensions_with_app(app):
                         namespace=getattr(app, "app_name", None))
     openid.init_app(app)
     admin.init_app(app)
+    db.init_app(app)
