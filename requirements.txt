@@ -13,5 +13,5 @@ Flask-Testing>=0.4
 Flask-Uploads>=0.1.3
 Flask-WTF>=0.8
 pep8
-pyflakes
+git+git://github.com/ervandew/pyflakes.git#egginfo=pyflakes
 https://github.com/tonyseek/nose/tarball/master#egginfo=nose
