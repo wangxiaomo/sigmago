@@ -7,6 +7,7 @@ import uuid
 from flask.ext.login import UserMixin
 
 from sigmago.corelib.ext import db, login_manager, admin_managed
+from sigmago.corelib.models import TimestampMixin
 
 
 class UserAccountQuery(db.Query):
@@ -17,11 +18,11 @@ class UserAccountQuery(db.Query):
         if uid.isdigit():
             return self.get(int(uid))
         else:
-            return self.filter_by(name=uid).one()
+            return self.filter_by(name=uid).first()
 
 
 @admin_managed
-class UserAccount(UserMixin, db.Model):
+class UserAccount(UserMixin, TimestampMixin, db.Model):
     """The account model of register user."""
 
     query_class = UserAccountQuery

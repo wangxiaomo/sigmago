@@ -6,6 +6,7 @@ import functools
 from flask.ext.assets import Environment
 from flask.ext.babel import Babel
 from flask.ext.login import LoginManager
+from flask.ext.mail import Mail
 from flask.ext.oauth import OAuth
 from flask.ext.openid import OpenID
 from flask.ext.sqlalchemy import SQLAlchemy
@@ -19,6 +20,7 @@ OAUTH_REMOTE_NAMES = ("google", "douban")
 assets = Environment()
 babel = Babel()
 login_manager = LoginManager()
+mail = Mail()
 oauth = OAuth()
 openid = OpenID()
 db = SQLAlchemy()
@@ -30,14 +32,15 @@ oauth.get_remote_app = functools.partial(get_remote_app, oauth)
 
 def setup_extensions_with_app(app):
     """Setups all extension to the given app."""
+    admin.init_app(app)
     assets.init_app(app)
     babel.init_app(app)
+    db.init_app(app)
     login_manager.init_app(app)
+    mail.init_app(app)
     setup_oauth_remotes(oauth, app.config,
                         namespace=getattr(app, "app_name", None))
     openid.init_app(app)
-    admin.init_app(app)
-    db.init_app(app)
 
 
 def admin_managed(model_class):
