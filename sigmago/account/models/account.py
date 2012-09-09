@@ -44,8 +44,7 @@ class UserAccount(UserMixin, TimestampMixin, db.Model):
     status = db.Column(db.Enum(*STATUS, name="UserAccountStatus"),
                        nullable=False, default="unactivated")
 
-    @db.validates("name")
-    @db.validates("email")
+    @db.validates("name", "email")
     def validate_to_lower(self, key, value):
         return value.lower()
 

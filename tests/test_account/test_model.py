@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
-from tests import SigmagoTestCase
+from sigmago.corelib.ext import db
 from sigmago.account.models import UserAccount
+from tests import SigmagoTestCase
 
 
 class UserAccountTestCase(SigmagoTestCase):
@@ -13,11 +14,11 @@ class UserAccountTestCase(SigmagoTestCase):
         account_alpha = UserAccount()
         account_alpha.name = "tonyseek"
         account_alpha.email = "tonyseek@sigmago.me"
-        account_alpha.nickname = "TonySeek"
+        account_alpha.nickname = u"TonySeek"
         #: create with all arguments
         account_beta = UserAccount(name="tonyseek",
                                    email="tonyseek@sigmago.me",
-                                   nickname="TonySeek",
+                                   nickname=u"TonySeek",
                                    passwd="123456")
         #: test attributes
         self.assertEqual(account_alpha.name, "tonyseek")
@@ -26,6 +27,15 @@ class UserAccountTestCase(SigmagoTestCase):
         self.assertEqual(account_alpha.name, account_beta.name)
         self.assertEqual(account_alpha.email, account_beta.email)
         self.assertEqual(account_alpha.nickname, account_beta.nickname)
+        #: test to store into database
+        db.session.add(account_alpha)
+        db.session.commit()
+        db.session.delete(account_alpha)
+        db.session.commit()
+        db.session.add(account_beta)
+        db.session.commit()
+        db.session.delete(account_beta)
+        db.session.commit()
 
     def test_password(self):
         """Tests the passwork checking feature of UserAccount."""
@@ -49,3 +59,18 @@ class UserAccountTestCase(SigmagoTestCase):
                             account_beta.passwd_hash)
         self.assertNotEqual(account_alpha.passwd_salt,
                             account_beta.passwd_salt)
+
+    def test_non_case_sensitive_name(self):
+        """Tests name and email of account is non case sensitive."""
+        #: create model
+        account = UserAccount(name="TonySeek", email="TonySeek@Gmail.COM",
+                              nickname=u"TonySeek", passwd="123456")
+        db.session.add(account)
+        db.session.commit()
+        #: compare with lower case name
+        self.assertEqual(account.name, "tonyseek")
+        self.assertEqual(account.email, "tonyseek@gmail.com")
+        #: query
+        query_by = UserAccount.query.filter_by
+        self.assertIs(account, query_by(name="tonyseek").first())
+        self.assertIs(account, query_by(email="tonyseek@gmail.com").first())

@@ -13,14 +13,11 @@ class TimestampMixin(db.Model):
     created = db.Column("created", db.DateTime, nullable=False,
                         default=datetime.datetime.utcnow)
     updated = db.Column("updated", db.DateTime, nullable=False,
-                        default=datetime.datetime.utcnow)
+                        default=datetime.datetime.utcnow,
+                        onupdate=datetime.datetime.utcnow)
 
     __abstract__ = True
     __mapper_args__ = {'order_by': created.desc()}
-
-    @db.validates("updated")
-    def validate_to_update_timestamp(self, key, value):
-        return datetime.datetime.utcnow()
 
 
 class BaseComment(TimestampMixin, db.Model):

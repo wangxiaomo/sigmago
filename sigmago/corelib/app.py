@@ -23,7 +23,7 @@ def make_app(import_name=None, config=None, app_name="sigmago"):
     #: loads outside configuration
     if not config:
         app.config.from_envvar(CONFIG_ENV_NAME)
-    elif os.path.exists(config):
+    elif isinstance(config, basestring) and os.path.exists(config):
         app.config.from_pyfile(config)
     else:
         app.config.from_object(config)

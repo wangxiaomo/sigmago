@@ -32,7 +32,8 @@ oauth.get_remote_app = functools.partial(get_remote_app, oauth)
 
 def setup_extensions_with_app(app):
     """Setups all extension to the given app."""
-    admin.init_app(app)
+    if not app.config["TESTING"]:
+        admin.init_app(app)
     assets.init_app(app)
     babel.init_app(app)
     db.init_app(app)
