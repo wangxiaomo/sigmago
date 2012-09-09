@@ -6,7 +6,8 @@ import datetime
 import contextlib
 
 from sigmago.corelib.ext import db
-from sigmago.corelib.models import TimestampMixin
+from sigmago.corelib.models import (TimestampMixin, CommentableMixin,
+                                    BaseComment)
 from tests import SigmagoTestCase
 
 
@@ -70,3 +71,48 @@ class TimestampMixinTestCase(SigmagoTestCase):
         self.assertTrue(interval.is_valid(), "time interval is not prepared.")
         self.assertGreaterEqual(time, interval.start_time)
         self.assertLessEqual(time, interval.end_time)
+
+
+class CommentableMixinTestCase(SigmagoTestCase):
+    """Test the commentable mixin class."""
+
+    class CommentablePost(CommentableMixin, db.Model):
+        """A mock class for testing CommentableMixin."""
+
+        class CommentUser(db.Model):
+            """A mock class for testing CommentableMixin."""
+
+            id = db.Column(db.Integer, primary_key=True)
+            name = db.Column(db.String)
+
+        id = db.Column(db.Integer, primary_key=True)
+        title = db.Column(db.String)
+
+        __commentable__ = {'owner_class': CommentUser,
+                           'owner_id': CommentUser.id,
+                           'subject_id': id}
+
+    def make_commentable_post(self, title):
+        model = self.CommentablePost(title=title)
+        return model
+
+    def test_meta(self):
+        """Test the meta data generating of mixed class."""
+        model = self.make_commentable_post("TITLE")
+        self.assertTrue(issubclass(model.comment_class, BaseComment))
+
+    def test_post_comment(self):
+        """Test to post a comment."""
+        #: create models
+        model = self.make_commentable_post("TITLE")
+        user = self.CommentablePost.CommentUser(name="tonyseek")
+        #: post it
+        comment = model.post_comment("aha", user)
+        #: store into db
+        db.session.add(model)
+        db.session.commit()
+        #: check data
+        self.assertEqual(model.title, "TITLE")
+        self.assertEqual(model.comments.count(), 1)
+        self.assertIs(comment, model.comments.first())
+        self.assertEqual(comment.content, "aha")

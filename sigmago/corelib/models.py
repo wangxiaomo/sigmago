@@ -19,6 +19,11 @@ class TimestampMixin(db.Model):
     __abstract__ = True
     __mapper_args__ = {'order_by': created.desc()}
 
+    @db.validates("updated")
+    def validate_updated(self, key, value):
+        """Coerces the timestamp be assigned with latest update time."""
+        return datetime.datetime.utcnow()
+
 
 class BaseComment(TimestampMixin, db.Model):
     """The base class of the comment model."""
@@ -55,14 +60,14 @@ class CommentableMixin(db.Model):
     """A mixin class to make subject could be commented.
 
     Example:
-    >>> class Subject(mixins.comment.Commentable, db.Model):
+    >>> class Subject(CommentableMixin, db.Model):
     ...     subject_id = db.Column(db.Ingeger, primary_key=True)
     ...
     ...     __commentable__ = {'owner_class': User, 'owner_id': User.id,
-                'subject_id': subject_id}
+    ...                        'subject_id': subject_id}
     >>>
     >>> subject = Subject()
-    >>> comment = subject.add_comment("My first comment.", current_user())
+    >>> comment = subject.post_comment("My first comment.", current_user())
     >>>
     >>> comment in subject.comments
     True
@@ -71,16 +76,20 @@ class CommentableMixin(db.Model):
     __abstract__ = True
     __commentable__ = {'owner_class': None, 'owner_id': None,
                        'subject_id': None}
+    __comment_cls__ = BaseComment
 
     @declared_attr
     def comments(cls):
         #: make the meta data of the subject class
         arguments = dict(cls.__commentable__)
         arguments['subject_class'] = cls
+        assert arguments['owner_class'] is not None
+        assert arguments['owner_id'] is not None
+        assert arguments['subject_id'] is not None
 
         #: create a comment class
         class_name = "%sComment" % cls.__name__
-        class_bases = (BaseComment,)
+        class_bases = (cls.__comment_cls__,)
         class_members = {'__commentable__': arguments}
         comment_class = type(class_name, class_bases, class_members)
         comment_class.__doc__ = "The comment of the %s." % class_name
