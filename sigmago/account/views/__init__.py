@@ -8,7 +8,7 @@ from flask.ext.babel import lazy_gettext as _
 from sigmago.corelib.ext import db
 from sigmago.account import app
 from sigmago.account.views import forms
-from sigmago.account.models import UserAccount, UserStatusError, get_user_by_id
+from sigmago.account.models import UserAccount, UserStatusError
 
 
 @app.errorhandler(UserStatusError)
@@ -38,7 +38,7 @@ class SignUpView(View):
         if request.method == "GET":
             if name:
                 #: fetch model
-                self.account = get_user_by_id(name) or abort(404)
+                self.account = UserAccount.query.get_by_uid(name) or abort(404)
 
                 if self.account.status == "unactivated":
                     if activate_token:

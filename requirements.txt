@@ -5,7 +5,8 @@ Flask>=0.9
 Flask-Assets>=0.7
 Flask-Babel>=0.8
 Flask-Login>=0.1.3
-http://github.com/mitsuhiko/flask-oauth/zipball/master#egg=Flask-OAuth-dev
+https://github.com/mattupstate/flask-mail/tarball/0.7.1#egg=Flask-Mail
+http://github.com/mitsuhiko/flask-oauth/zipball/master#egg=Flask-OAuth
 Flask-OpenID>=1.0.1
 Flask-Script
 Flask-SQLAlchemy>=0.1.6
@@ -13,5 +14,5 @@ Flask-Testing>=0.4
 Flask-Uploads>=0.1.3
 Flask-WTF>=0.8
 pep8
-git+git://github.com/ervandew/pyflakes.git#egginfo=pyflakes
-https://github.com/tonyseek/nose/tarball/master#egginfo=nose
+git+git://github.com/ervandew/pyflakes.git#egg=pyflakes
+https://github.com/tonyseek/nose/tarball/master#egg=nose

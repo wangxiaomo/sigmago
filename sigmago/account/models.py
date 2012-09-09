@@ -6,11 +6,25 @@ import uuid
 
 from flask.ext.login import UserMixin
 
-from sigmago.corelib.ext import db, login_manager
+from sigmago.corelib.ext import db, login_manager, admin_managed
 
 
+class UserAccountQuery(db.Query):
+    """The database query handler of account model."""
+
+    def get_by_uid(self, uid):
+        """Accept a string user id and return a account object."""
+        if uid.isdigit():
+            return self.get(int(uid))
+        else:
+            return self.filter_by(name=uid).one()
+
+
+@admin_managed
 class UserAccount(UserMixin, db.Model):
     """The account model of register user."""
+
+    query_class = UserAccountQuery
 
     #: the strategy to generate hash salt
     hash_salt_generator = staticmethod(lambda: uuid.uuid4().hex)
@@ -41,6 +55,10 @@ class UserAccount(UserMixin, db.Model):
         self.change_passwd(passwd)
         #: assign other attributes
         super(UserAccount, self).__init__(**fields)
+
+    def __unicode__(self):
+        return u"%s (@%s) %s [%s]" % (self.nickname, self.name, self.email,
+                                      self.status.upper())
 
     def change_passwd(self, new_passwd):
         """Changes a new password.
@@ -113,20 +131,6 @@ class UserStatusError(Exception):
         self.target_status = target_status
 
 
-def get_user_by_id(uid):
-    """Accept a string user id and return a account object."""
-    if uid.isdigit():
-        return UserAccount.query.get(int(uid))
-    else:
-        return UserAccount.query.filter_by(name=uid).one()
-
-
-def store_user(user):
-    """Store a user's account into database."""
-    db.session.add(user)
-    db.session.commit()
-
-
 @login_manager.user_loader
 def _load_user(uid):
-    return get_user_by_id(uid)
+    return UserAccount.query.get_by_uid(uid)

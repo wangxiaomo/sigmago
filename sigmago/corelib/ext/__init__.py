@@ -23,7 +23,6 @@ oauth = OAuth()
 openid = OpenID()
 db = SQLAlchemy()
 admin = Admin()
-admin.register = functools.partial(admin.register, session=db.session)
 
 #: wraps the "get_remote_app" function to an instance method
 oauth.get_remote_app = functools.partial(get_remote_app, oauth)
@@ -39,3 +38,9 @@ def setup_extensions_with_app(app):
     openid.init_app(app)
     admin.init_app(app)
     db.init_app(app)
+
+
+def admin_managed(model_class):
+    """A decorator to register a model class to super admin."""
+    admin.register(model_class, session=db.session)
+    return model_class
