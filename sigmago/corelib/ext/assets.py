@@ -8,7 +8,19 @@ from jinja2.ext import Extension
 
 
 class ContextAssetsExtension(Extension):
-    """A extension to support extending context assets by names in template."""
+    """A extension to support extending context assets by names in template.
+
+    Those names are defined by bundles of Flask-Assets extension.
+
+    Usage Example:
+
+        {% extends "layout.html" %}
+        {% scripts "scripts.photo-album", "scripts.dialog" %}
+        {% stylesheets "stylesheets.dialog" %}
+
+    The names will be appended to context variable "assets_stylesheets" and
+    "assets_scripts".
+    """
 
     tags = {'stylesheets': "assets_stylesheets",
             'scripts': "assets_scripts"}
