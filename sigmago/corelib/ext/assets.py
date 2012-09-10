@@ -5,6 +5,7 @@ import os.path
 
 from jinja2 import nodes
 from jinja2.ext import Extension
+from webassets.env import RegisterError
 
 
 class ContextAssetsExtension(Extension):
@@ -44,7 +45,13 @@ class ContextAssetsExtension(Extension):
 def setup_app_assets(app, assets):
     """Set up all application level assets."""
     app.jinja_env.add_extension(ContextAssetsExtension)
-    assets.from_yaml(os.path.join(app.root_path, "config/assets.yaml"))
+
+    try:
+        assets.from_yaml(os.path.join(app.root_path, "config/assets.yaml"))
+    except RegisterError as error:
+        #: ignore repeat loading in testing
+        if not app.config['TESTING']:
+            raise error
 
     @app.context_processor
     def assets_names():
