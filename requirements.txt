@@ -1,8 +1,9 @@
 http://tonyseek.googlecode.com/files/Babel-1.0dev-r0.tar.gz#egg=babel
 http://hg.sqlalchemy.org/sqlalchemy/archive/default.tar.gz#egg=sqlalchemy
 https://bitbucket.org/simplecodes/wtforms/get/tip.tar.gz#egg=wtforms
+https://github.com/miracle2k/webassets/tarball/master#egg=webassets
 Flask>=0.9
-Flask-Assets>=0.7
+https://github.com/miracle2k/flask-assets/tarball/master#egg=Flask-Assets
 Flask-Babel>=0.8
 Flask-Login>=0.1.3
 https://github.com/mattupstate/flask-mail/tarball/0.7.1#egg=Flask-Mail
@@ -13,6 +14,7 @@ Flask-SQLAlchemy>=0.1.6
 Flask-Testing>=0.4
 Flask-Uploads>=0.1.3
 Flask-WTF>=0.8
+PyYAML
 pep8
 git+git://github.com/ervandew/pyflakes.git#egg=pyflakes
 https://github.com/tonyseek/nose/tarball/master#egg=nose

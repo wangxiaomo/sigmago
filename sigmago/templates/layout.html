@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>{{ title | default("sigmago") }}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="{{ description | default('提供书籍互借，以及教材教辅捐赠') }}">
+        {%- assets "scripts.public" %}
+        <script src="{{ ASSET_URL }}"></script>
+        {%- endassets %}
+        {%- assets "stylesheets.public" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}">
+        {%- endassets %}
+    </head>
+    <body>
+        {%- block body %}
+        {%- endblock %}
+    </body>
+</html>
+{#- vim: set ft=jinja: -#}

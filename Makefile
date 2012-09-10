@@ -20,6 +20,8 @@ install_libs: $(REQUIREMENT)
 	@echo "=> Installing required libraries." >&2
 	$(ACTIVATE) pip install --download-cache $(PIP_CACHE_DIR) \
 		-r $(REQUIREMENT)
+	@echo "=> Initializing Git Submodules." >&2
+	git submodule init
 	@echo "=> Creating links of this project in site-packages directory." >&2
 	python setup.py develop
 
@@ -33,6 +35,9 @@ install_githook:
 	@echo "=> Installing git hooks to check source before commit."
 	cp ./misc/githooks/pre-commit $(GIT_PRE_COMMIT)
 	chmod +x $(GIT_PRE_COMMIT)
+
+install_node: misc/install-node
+	$(ACTIVATE) misc/install-node
 
 init: init_env install_libs install_githook
 
@@ -55,3 +60,10 @@ check:
 
 test:
 	$(ACTIVATE) python setup.py test
+
+clean:
+	find . -name "*.log" -type f | xargs rm -f
+	find . -name "*.pyc" -type f | xargs rm -f
+	find . -name "*.pyo" -type f | xargs rm -f
+	find ./sigmago/static -name "*.min.js" -type f | xargs rm -f
+	find ./sigmago/static -name "*.min.css" -type f | xargs rm -f

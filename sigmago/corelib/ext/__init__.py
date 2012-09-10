@@ -13,9 +13,8 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.superadmin import Admin
 
 from sigmago.corelib.ext.oauth import setup_oauth_remotes, get_remote_app
+from sigmago.corelib.ext.assets import setup_app_assets
 
-
-OAUTH_REMOTE_NAMES = ("google", "douban")
 
 assets = Environment()
 babel = Babel()
@@ -39,9 +38,10 @@ def setup_extensions_with_app(app):
     db.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
+    openid.init_app(app)
     setup_oauth_remotes(oauth, app.config,
                         namespace=getattr(app, "app_name", None))
-    openid.init_app(app)
+    setup_app_assets(assets, app.root_path)
 
 
 def admin_managed(model_class):

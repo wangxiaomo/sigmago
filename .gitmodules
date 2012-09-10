@@ -1,0 +1,3 @@
+[submodule "sigmago/static/assets/bootstrap"]
+	path = sigmago/static/assets/bootstrap
+	url = git://github.com/twitter/bootstrap.git

@@ -1,6 +1,9 @@
 *.py[co]
 *.egg
 *.egg-info
+*.log
+*.min.js
+*.min.css
 dist
 build
 eggs
@@ -16,3 +19,4 @@ pip-log.txt
 *.mo
 *.swp
 tags
+*.webassets-cache
