@@ -41,7 +41,7 @@ def setup_extensions_with_app(app):
     openid.init_app(app)
     setup_oauth_remotes(oauth, app.config,
                         namespace=getattr(app, "app_name", None))
-    setup_app_assets(assets, app.root_path)
+    setup_app_assets(app, assets)
 
 
 def admin_managed(model_class):
